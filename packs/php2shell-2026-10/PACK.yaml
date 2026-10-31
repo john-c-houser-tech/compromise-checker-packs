@@ -1,0 +1,458 @@
+format: 1
+id: php2shell-2026-10
+version: 1
+title: "PHP2Shell: PHP remote code execution (CVE-2026-109618, CVE-2026-109619)"
+published: 2026-10-30
+cves: [CVE-2026-109618, CVE-2026-109619]
+exposure:
+  # The details leaked on 2026-10-20 (Sansec's timeline); Cloudflare reported
+  # the first attacks at 07:43 UTC the next day. The flaws go back to PHP 5.4.
+  window_start: 2026-10-20T00:00:00Z
+  first_seen_in_wild: 2026-10-21T07:43:00Z
+  likelihood_ratio: 5
+  # Every PHP build is affected: one from a repository not listed here isn't safe.
+  other_builds: cant_judge
+  packages:
+    # Ubuntu's own builds: a backported fix, so the version barely moves.
+    - release: "ubuntu:22.04"
+      binary_names: [php8.1-fpm, libapache2-mod-php8.1, php8.1-cgi]
+      versions: "8.1.2-1*"
+      fixed: "8.1.2-1ubuntu2.28"
+      source: https://ubuntu.com/security/notices/USN-8948-1
+    - release: "ubuntu:22.04"
+      binary_names: [libapache2-mod-php7.4, libapache2-mod-php8.0]
+      versions: "8.1.2-*"
+      fixed: "8.1.2-1ubuntu2.28"
+      source: https://ubuntu.com/security/notices/USN-8948-1
+    - release: "ubuntu:24.04"
+      binary_names: [php8.3-fpm, libapache2-mod-php8.3, php8.3-cgi]
+      versions: "8.3.6-0*"
+      fixed: "8.3.6-0ubuntu0.24.04.13"
+      source: https://ubuntu.com/security/notices/USN-8948-1
+    - release: "ubuntu:26.04"
+      binary_names: [php8.5-fpm, libapache2-mod-php8.5, php8.5-cgi, php8.5-litespeed]
+      versions: "8.5.4-0*"
+      fixed: "8.5.4-0ubuntu1.5"
+      source: https://ubuntu.com/security/notices/USN-8948-1
+    - release: "ubuntu:26.10"
+      binary_names: [php8.5-fpm, libapache2-mod-php8.5, php8.5-cgi, php8.5-litespeed]
+      versions: "8.5.9-0*"
+      fixed: "8.5.9-0ubuntu2.1"
+      source: https://ubuntu.com/security/notices/USN-8948-1
+    # The Sury PPA, from its Launchpad publishing history: published 2026-10-21.
+    - release: "ubuntu:22.04"
+      binary_names: [php5.6-fpm, libapache2-mod-php5.6, php5.6-cgi, php5.6-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "5.6.40-104+ubuntu22.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:22.04"
+      binary_names: [php7.0-fpm, libapache2-mod-php7.0, php7.0-cgi, php7.0-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "7.0.33-92+ubuntu22.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:22.04"
+      binary_names: [php7.1-fpm, libapache2-mod-php7.1, php7.1-cgi, php7.1-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "7.1.33-80+ubuntu22.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:22.04"
+      binary_names: [php7.2-fpm, libapache2-mod-php7.2, php7.2-cgi, php7.2-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "7.2.34-66+ubuntu22.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:22.04"
+      binary_names: [php7.3-fpm, libapache2-mod-php7.3, php7.3-cgi, php7.3-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "7.3.33-35+ubuntu22.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:22.04"
+      binary_names: [php7.4-fpm, libapache2-mod-php7.4, php7.4-cgi, php7.4-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "1:7.4.33-31+ubuntu22.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:22.04"
+      binary_names: [php8.0-fpm, libapache2-mod-php8.0, php8.0-cgi, php8.0-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "1:8.0.30-25+ubuntu22.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:22.04"
+      binary_names: [php8.1-fpm, libapache2-mod-php8.1, php8.1-cgi, php8.1-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "8.1.34-9+ubuntu22.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:22.04"
+      binary_names: [php8.2-fpm, libapache2-mod-php8.2, php8.2-cgi, php8.2-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "8.2.35-1+ubuntu22.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:22.04"
+      binary_names: [php8.3-fpm, libapache2-mod-php8.3, php8.3-cgi, php8.3-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "8.3.36-1+ubuntu22.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:22.04"
+      binary_names: [php8.4-fpm, libapache2-mod-php8.4, php8.4-cgi, php8.4-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "8.4.27-1+ubuntu22.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:22.04"
+      binary_names: [php8.5-fpm, libapache2-mod-php8.5, php8.5-cgi, php8.5-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "8.5.12-1+ubuntu22.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:24.04"
+      binary_names: [php5.6-fpm, libapache2-mod-php5.6, php5.6-cgi, php5.6-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "5.6.40-104+ubuntu24.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:24.04"
+      binary_names: [php7.0-fpm, libapache2-mod-php7.0, php7.0-cgi, php7.0-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "7.0.33-92+ubuntu24.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:24.04"
+      binary_names: [php7.1-fpm, libapache2-mod-php7.1, php7.1-cgi, php7.1-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "7.1.33-80+ubuntu24.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:24.04"
+      binary_names: [php7.2-fpm, libapache2-mod-php7.2, php7.2-cgi, php7.2-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "7.2.34-66+ubuntu24.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:24.04"
+      binary_names: [php7.3-fpm, libapache2-mod-php7.3, php7.3-cgi, php7.3-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "7.3.33-35+ubuntu24.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:24.04"
+      binary_names: [php7.4-fpm, libapache2-mod-php7.4, php7.4-cgi, php7.4-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "1:7.4.33-31+ubuntu24.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:24.04"
+      binary_names: [php8.0-fpm, libapache2-mod-php8.0, php8.0-cgi, php8.0-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "1:8.0.30-25+ubuntu24.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:24.04"
+      binary_names: [php8.1-fpm, libapache2-mod-php8.1, php8.1-cgi, php8.1-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "8.1.34-9+ubuntu24.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:24.04"
+      binary_names: [php8.2-fpm, libapache2-mod-php8.2, php8.2-cgi, php8.2-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "8.2.35-1+ubuntu24.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:24.04"
+      binary_names: [php8.3-fpm, libapache2-mod-php8.3, php8.3-cgi, php8.3-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "8.3.36-1+ubuntu24.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:24.04"
+      binary_names: [php8.4-fpm, libapache2-mod-php8.4, php8.4-cgi, php8.4-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "8.4.27-1+ubuntu24.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:24.04"
+      binary_names: [php8.5-fpm, libapache2-mod-php8.5, php8.5-cgi, php8.5-litespeed]
+      versions: "*+deb.sury.org*"
+      fixed: "8.5.12-1+ubuntu24.04.1+deb.sury.org+1"
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    # RHEL and its rebuilds. /usr/bin/php-cgi is in php-cli here, so a host with php-cli alone also counts. Patterns stop at the build hash, so Alma's own .alma builds fall to their entries below.
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli]
+      versions: "8.0.*.el9"
+      fixed: "8.0.30-8.el9_8.1"
+      source: https://access.redhat.com/errata/RHSA-2026:87151
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli]
+      versions: "8.0.*.el9_?"
+      fixed: "8.0.30-8.el9_8.1"
+      source: https://access.redhat.com/errata/RHSA-2026:87151
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli]
+      versions: "8.0.*.el9_?.?"
+      fixed: "8.0.30-8.el9_8.1"
+      source: https://access.redhat.com/errata/RHSA-2026:87151
+    # No fix from Red Hat or Rocky for the php:8.1 stream; Alma's own is below.
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli]
+      versions: "8.1.*module?el9*+????????"
+      fixed: null
+      source: https://almalinux.org/blog/2026-10-21-php2shell-cve-2026-109618-cve-2026-109619/
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli]
+      versions: "8.2.*module?el9*+????????"
+      fixed: "8.2.35-1.module+el9.8.0"
+      source: https://access.redhat.com/errata/RHSA-2026:87072
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli]
+      versions: "8.3.*module?el9*+????????"
+      fixed: "8.3.36-1.module+el9.8.0"
+      source: https://access.redhat.com/errata/RHSA-2026:87079
+    # Red Hat lists the php:8.4 stream on RHEL 9 as affected, with no fix yet.
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli]
+      versions: "8.4.*module?el9*+????????"
+      fixed: null
+      source: https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2026-109618.json
+    - release: "rhel:10"
+      binary_names: [php, php-fpm, php-cli]
+      versions: "8.3.*.el10"
+      fixed: "8.3.36-1.el10_2"
+      source: https://access.redhat.com/errata/RHSA-2026:87070
+    - release: "rhel:10"
+      binary_names: [php, php-fpm, php-cli]
+      versions: "8.3.*.el10_?"
+      fixed: "8.3.36-1.el10_2"
+      source: https://access.redhat.com/errata/RHSA-2026:87070
+    - release: "rhel:10"
+      binary_names: [php, php-fpm, php-cli]
+      versions: "8.3.*.el10_?.?"
+      fixed: "8.3.36-1.el10_2"
+      source: https://access.redhat.com/errata/RHSA-2026:87070
+    - release: "rhel:10"
+      binary_names: [php8.4, php8.4-fpm, php8.4-cli]
+      versions: "8.4.*.el10"
+      fixed: "8.4.27-1.el10_2"
+      source: https://access.redhat.com/errata/RHSA-2026:87071
+    - release: "rhel:10"
+      binary_names: [php8.4, php8.4-fpm, php8.4-cli]
+      versions: "8.4.*.el10_?"
+      fixed: "8.4.27-1.el10_2"
+      source: https://access.redhat.com/errata/RHSA-2026:87071
+    - release: "rhel:10"
+      binary_names: [php8.4, php8.4-fpm, php8.4-cli]
+      versions: "8.4.*.el10_?.?"
+      fixed: "8.4.27-1.el10_2"
+      source: https://access.redhat.com/errata/RHSA-2026:87071
+    # AlmaLinux's own backports, released ahead of Red Hat's: any .alma build carries the fix.
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli]
+      versions: "8.0.*alma*"
+      fixed: "8.0.30-8.el9_8.alma.1"
+      source: https://almalinux.org/blog/2026-10-21-php2shell-cve-2026-109618-cve-2026-109619/
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli]
+      versions: "8.1.*alma*"
+      fixed: "8.1.32-1.module_el9.8.0"
+      source: https://almalinux.org/blog/2026-10-21-php2shell-cve-2026-109618-cve-2026-109619/
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli]
+      versions: "8.2.*alma*"
+      fixed: "8.2.33-1.module_el9.8.0"
+      source: https://almalinux.org/blog/2026-10-21-php2shell-cve-2026-109618-cve-2026-109619/
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli]
+      versions: "8.3.*alma*"
+      fixed: "8.3.33-1.module_el9.8.0"
+      source: https://almalinux.org/blog/2026-10-21-php2shell-cve-2026-109618-cve-2026-109619/
+    - release: "rhel:10"
+      binary_names: [php, php-fpm, php-cli]
+      versions: "8.3.*alma*"
+      fixed: "8.3.33-1.el10_2.alma.1"
+      source: https://almalinux.org/blog/2026-10-21-php2shell-cve-2026-109618-cve-2026-109619/
+    - release: "rhel:10"
+      binary_names: [php8.4, php8.4-fpm, php8.4-cli]
+      versions: "8.4.*alma*"
+      fixed: "8.4.24-1.el10_2.alma.1"
+      source: https://almalinux.org/blog/2026-10-21-php2shell-cve-2026-109618-cve-2026-109619/
+    # Remi's repository, modular builds and Software Collections (phpNN-php holds mod_php). Remi rebuilds 7.4, 8.0 and 8.1 with a backported fix; 8.2 and up are PHP's own releases.
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli, php-litespeed]
+      versions: "7.4.*remi*"
+      fixed: "7.4.33-31"
+      source: https://rpms.remirepo.net/enterprise/9/modular/x86_64/
+    - release: "rhel:9"
+      binary_names: [php74-php, php74-php-fpm, php74-php-cli, php74-php-litespeed]
+      versions: "7.4.*remi*"
+      fixed: "7.4.33-31"
+      source: https://rpms.remirepo.net/enterprise/9/safe/x86_64/
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli, php-litespeed]
+      versions: "8.0.*remi*"
+      fixed: "8.0.30-21"
+      source: https://rpms.remirepo.net/enterprise/9/modular/x86_64/
+    - release: "rhel:9"
+      binary_names: [php80-php, php80-php-fpm, php80-php-cli, php80-php-litespeed]
+      versions: "8.0.*remi*"
+      fixed: "8.0.30-21"
+      source: https://rpms.remirepo.net/enterprise/9/safe/x86_64/
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli, php-litespeed]
+      versions: "8.1.*remi*"
+      fixed: "8.1.34-6"
+      source: https://rpms.remirepo.net/enterprise/9/modular/x86_64/
+    - release: "rhel:9"
+      binary_names: [php81-php, php81-php-fpm, php81-php-cli, php81-php-litespeed]
+      versions: "8.1.*remi*"
+      fixed: "8.1.34-6"
+      source: https://rpms.remirepo.net/enterprise/9/safe/x86_64/
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli, php-litespeed, php82-php, php82-php-fpm, php82-php-cli, php82-php-litespeed]
+      versions: "8.2.*remi*"
+      fixed: "8.2.35-1"
+      source: https://blog.remirepo.net/post/2026/10/22/PHP-version-8.2.35-8.3.36-8.4.27-8.5.12
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli, php-litespeed, php83-php, php83-php-fpm, php83-php-cli, php83-php-litespeed]
+      versions: "8.3.*remi*"
+      fixed: "8.3.36-1"
+      source: https://blog.remirepo.net/post/2026/10/22/PHP-version-8.2.35-8.3.36-8.4.27-8.5.12
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli, php-litespeed, php84-php, php84-php-fpm, php84-php-cli, php84-php-litespeed]
+      versions: "8.4.*remi*"
+      fixed: "8.4.27-1"
+      source: https://blog.remirepo.net/post/2026/10/22/PHP-version-8.2.35-8.3.36-8.4.27-8.5.12
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli, php-litespeed, php85-php, php85-php-fpm, php85-php-cli, php85-php-litespeed]
+      versions: "8.5.*remi*"
+      fixed: "8.5.12-1"
+      source: https://blog.remirepo.net/post/2026/10/22/PHP-version-8.2.35-8.3.36-8.4.27-8.5.12
+    - release: "rhel:10"
+      binary_names: [php, php-fpm, php-cli, php-litespeed]
+      versions: "7.4.*remi*"
+      fixed: "7.4.33-31"
+      source: https://rpms.remirepo.net/enterprise/10/modular/x86_64/
+    - release: "rhel:10"
+      binary_names: [php74-php, php74-php-fpm, php74-php-cli, php74-php-litespeed]
+      versions: "7.4.*remi*"
+      fixed: "7.4.33-31"
+      source: https://rpms.remirepo.net/enterprise/10/safe/x86_64/
+    - release: "rhel:10"
+      binary_names: [php, php-fpm, php-cli, php-litespeed]
+      versions: "8.0.*remi*"
+      fixed: "8.0.30-21"
+      source: https://rpms.remirepo.net/enterprise/10/modular/x86_64/
+    - release: "rhel:10"
+      binary_names: [php80-php, php80-php-fpm, php80-php-cli, php80-php-litespeed]
+      versions: "8.0.*remi*"
+      fixed: "8.0.30-21"
+      source: https://rpms.remirepo.net/enterprise/10/safe/x86_64/
+    - release: "rhel:10"
+      binary_names: [php, php-fpm, php-cli, php-litespeed]
+      versions: "8.1.*remi*"
+      fixed: "8.1.34-6"
+      source: https://rpms.remirepo.net/enterprise/10/modular/x86_64/
+    - release: "rhel:10"
+      binary_names: [php81-php, php81-php-fpm, php81-php-cli, php81-php-litespeed]
+      versions: "8.1.*remi*"
+      fixed: "8.1.34-6"
+      source: https://rpms.remirepo.net/enterprise/10/safe/x86_64/
+    - release: "rhel:10"
+      binary_names: [php, php-fpm, php-cli, php-litespeed, php82-php, php82-php-fpm, php82-php-cli, php82-php-litespeed]
+      versions: "8.2.*remi*"
+      fixed: "8.2.35-1"
+      source: https://blog.remirepo.net/post/2026/10/22/PHP-version-8.2.35-8.3.36-8.4.27-8.5.12
+    - release: "rhel:10"
+      binary_names: [php, php-fpm, php-cli, php-litespeed, php83-php, php83-php-fpm, php83-php-cli, php83-php-litespeed]
+      versions: "8.3.*remi*"
+      fixed: "8.3.36-1"
+      source: https://blog.remirepo.net/post/2026/10/22/PHP-version-8.2.35-8.3.36-8.4.27-8.5.12
+    - release: "rhel:10"
+      binary_names: [php, php-fpm, php-cli, php-litespeed, php84-php, php84-php-fpm, php84-php-cli, php84-php-litespeed]
+      versions: "8.4.*remi*"
+      fixed: "8.4.27-1"
+      source: https://blog.remirepo.net/post/2026/10/22/PHP-version-8.2.35-8.3.36-8.4.27-8.5.12
+    - release: "rhel:10"
+      binary_names: [php, php-fpm, php-cli, php-litespeed, php85-php, php85-php-fpm, php85-php-cli, php85-php-litespeed]
+      versions: "8.5.*remi*"
+      fixed: "8.5.12-1"
+      source: https://blog.remirepo.net/post/2026/10/22/PHP-version-8.2.35-8.3.36-8.4.27-8.5.12
+    # PHP 8.6 pre-releases: no release candidate is known to carry the fix.
+    - release: "ubuntu:22.04"
+      binary_names: [php8.6-fpm, libapache2-mod-php8.6, php8.6-cgi, php8.6-litespeed]
+      versions: "8.6.0~*"
+      fixed: null
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "ubuntu:24.04"
+      binary_names: [php8.6-fpm, libapache2-mod-php8.6, php8.6-cgi, php8.6-litespeed]
+      versions: "8.6.0~*"
+      fixed: null
+      source: https://launchpad.net/~ondrej/+archive/ubuntu/php
+    - release: "rhel:9"
+      binary_names: [php, php-fpm, php-cli, php-litespeed, php86-php, php86-php-fpm, php86-php-cli, php86-php-litespeed]
+      versions: "8.6.0~*"
+      fixed: null
+      source: https://rpms.remirepo.net/enterprise/9/modular/x86_64/
+    - release: "rhel:10"
+      binary_names: [php, php-fpm, php-cli, php-litespeed, php86-php, php86-php-fpm, php86-php-cli, php86-php-litespeed]
+      versions: "8.6.0~*"
+      fixed: null
+      source: https://rpms.remirepo.net/enterprise/10/modular/x86_64/
+  stale_code: {programs: ["php-fpm*", "php-cgi*", "lsphp*"]}
+mitigations:
+  - id: upload-progress-off
+    setting: {kind: php_ini, name: session.upload_progress.enabled}
+    expect: "off"
+    default: "on"
+    covers: [CVE-2026-115560]
+    text: >-
+      Turn off upload progress tracking (session.upload_progress.enabled = 0, with
+      php_admin_flag in each PHP-FPM pool) and restart every worker. It blocks the
+      session upload progress route to CVE-2026-109619, not the other routes (on PHP
+      8.5 also set fatal_error_backtraces=0), and does nothing for CVE-2026-109618: it
+      doesn't replace the fixed package. PHP suggests keeping it off until its next
+      regular release fixes CVE-2026-115560, unless the application never changes
+      session.serialize_handler at runtime. PHP warns not to rely on ini_set() or an
+      FPM .user.ini for this.
+detections:
+  - id: worker-child
+    check: web.worker_child
+    likelihood_ratio: 100
+  - id: new-script-hit
+    check: web.new_script_hit
+    likelihood_ratio: 50
+  - id: server-errors
+    check: web.errors
+    counts: while_exposed
+    likelihood_ratio: 4
+  - id: php-crash
+    title: PHP workers crashing
+    counts: while_exposed
+    events:
+      any_of:
+        - type: web.error
+          fields: {message: {glob: "*child * exited on signal 11*"}}
+        - type: web.error
+          fields: {message: {glob: "*child * exited on signal 6*"}}
+        - type: web.error
+          fields: {message: {glob: "*child * exited on signal 7*"}}
+        - type: web.error
+          fields: {message: {glob: "*exit signal Segmentation fault*"}}
+        - type: kernel.segfault
+          fields: {comm: {prefix: php-fpm}}
+      # One crash can log two lines, here and in the kernel's.
+      count: {at_least: 6, within: 10m}
+    likelihood_ratio: 8
+  - id: memory-limit-burst
+    title: A burst of PHP memory-limit errors
+    counts: while_exposed
+    events:
+      any_of:
+        - type: web.error
+          fields: {message: {glob: "*Allowed memory size of * bytes exhausted*"}}
+      count: {at_least: 30, within: 10m}
+    likelihood_ratio: 3
+remediation:
+  - >-
+    Upgrade PHP to a fixed package and restart every PHP worker, and Apache where it
+    runs mod_php: this pack can't detect an Apache left running on the old module.
+  - >-
+    If the host was exposed during the window, treat secrets the PHP process could
+    read as possibly disclosed: rotate application keys, database passwords, API
+    keys and TLS private keys, and invalidate sessions.
+  - >-
+    Check PHP this pack doesn't list: cPanel's and Plesk's own packages, and software
+    that bundles its own PHP. Ubuntu 20.04 and older (USN-8948-2) and RHEL 8 have vendor
+    fixes this version of the pack doesn't judge.
+references:
+  - https://www.cisa.gov/news-events/alerts/2026/10/21/critical-vulnerabilities-php-require-immediate-patching
+  - https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w
+  - https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp
+  - https://access.redhat.com/security/vulnerabilities/RHSB-2026-013
+  - https://almalinux.org/blog/2026-10-21-php2shell-cve-2026-109618-cve-2026-109619/
+  - https://ubuntu.com/security/notices/USN-8948-2
+  - https://sansec.io/research/php2shell
+  - https://github.com/NCSC-NL/php2shell
