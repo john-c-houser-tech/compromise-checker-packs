@@ -1,0 +1,8 @@
+# The packs repository's release index (checker packs index). Signed by
+# hand with the pack key: index.yaml.minisig.
+format: 1
+serial: 1
+issued: 2026-10-31T05:12:15Z
+packs:
+  - {id: "php2shell-2026-10", version: 1, sha256: "3e388f4fd9e148f57436daf288b8183ce8c324f8e44b27171f92b9e6a0644b15"}
+withdrawn: []
