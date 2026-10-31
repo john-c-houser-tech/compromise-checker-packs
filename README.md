@@ -46,9 +46,10 @@ minisign -V -P <root public key> -m keys.yaml
 minisign -V -P <pack public key> -m packs/<id>/PACK.yaml
 ```
 
-- **The root public key** ships inside the tool. It is also published on
-  [nouriloop.com](https://nouriloop.com/), so it can be checked from two
-  independent places.
+- **The root public key** (key id `93AB05572B87296E`) ships inside the tool.
+  It is also published at
+  [nouriloop.com/keys/compromise-checker-root.pub](https://nouriloop.com/keys/compromise-checker-root.pub),
+  so it can be checked from two independent places.
 - **The pack public keys** are listed in `keys.yaml`.
 
 ## How releases work
