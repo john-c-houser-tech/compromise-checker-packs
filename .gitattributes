@@ -1,0 +1,4 @@
+# Signed as they are: a changed line ending breaks the signature.
+keys.yaml* -text
+index.yaml* -text
+packs/** -text
