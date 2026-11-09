@@ -1,0 +1,318 @@
+# ASP.NET Core (Kestrel) HTTP request smuggling: security feature bypass and request tampering
+# Assembled by the pack drafter (A.7). Where each part came from:
+#   prose (title, mitigations, detections, remediation, references): an AI draft, edited by a person (remediation), read and accepted by jch (draft sha256 7c3310d9e89b33cf)
+#   packages: vendor data for CVE-2026-70188, CVE-2026-88092 (`drafter fill`)
+#   id, version, window, weight, binary filter: the person's assembly file
+format: 1
+id: dotnet-2026-10
+version: 1
+title: 'ASP.NET Core (Kestrel) HTTP request smuggling: security feature bypass and request
+  tampering'
+published: 2026-11-09
+cves: [CVE-2026-70188, CVE-2026-88092]
+exposure:
+  window_start: 2026-10-13T00:00:00Z
+  likelihood_ratio: 2
+  # A build no entry matches reads "can't judge", never "not affected".
+  other_builds: cant_judge
+  packages:
+    # RHEL, with Rocky Linux and AlmaLinux rebuilds
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-10.0"]
+      versions: "*.el10"
+      fixed: "10.0.13-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86195"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-8.0"]
+      versions: "*.el10"
+      fixed: "8.0.32-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86168"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-9.0"]
+      versions: "*.el10"
+      fixed: "9.0.21-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86172"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-10.0"]
+      versions: "*.el10_?"
+      fixed: "10.0.13-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86195"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-8.0"]
+      versions: "*.el10_?"
+      fixed: "8.0.32-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86168"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-9.0"]
+      versions: "*.el10_?"
+      fixed: "9.0.21-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86172"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-10.0"]
+      versions: "*.el10_?.?"
+      fixed: "10.0.13-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86195"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-8.0"]
+      versions: "*.el10_?.?"
+      fixed: "8.0.32-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86168"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-9.0"]
+      versions: "*.el10_?.?"
+      fixed: "9.0.21-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86172"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-10.0"]
+      versions: "*.el10_?.??"
+      fixed: "10.0.13-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86195"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-8.0"]
+      versions: "*.el10_?.??"
+      fixed: "8.0.32-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86168"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-9.0"]
+      versions: "*.el10_?.??"
+      fixed: "9.0.21-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86172"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-10.0"]
+      versions: "*.el10_??"
+      fixed: "10.0.13-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86195"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-8.0"]
+      versions: "*.el10_??"
+      fixed: "8.0.32-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86168"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-9.0"]
+      versions: "*.el10_??"
+      fixed: "9.0.21-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86172"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-10.0"]
+      versions: "*.el10_??.?"
+      fixed: "10.0.13-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86195"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-8.0"]
+      versions: "*.el10_??.?"
+      fixed: "8.0.32-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86168"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-9.0"]
+      versions: "*.el10_??.?"
+      fixed: "9.0.21-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86172"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-10.0"]
+      versions: "*.el10_??.??"
+      fixed: "10.0.13-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86195"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-8.0"]
+      versions: "*.el10_??.??"
+      fixed: "8.0.32-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86168"
+    - release: "rhel:10"
+      binary_names: ["aspnetcore-runtime-9.0"]
+      versions: "*.el10_??.??"
+      fixed: "9.0.21-1.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:86172"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-10.0"]
+      versions: "*.el9"
+      fixed: "10.0.13-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86193"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-8.0"]
+      versions: "*.el9"
+      fixed: "8.0.32-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86169"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-9.0"]
+      versions: "*.el9"
+      fixed: "9.0.21-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86171"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-10.0"]
+      versions: "*.el9_?"
+      fixed: "10.0.13-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86193"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-8.0"]
+      versions: "*.el9_?"
+      fixed: "8.0.32-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86169"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-9.0"]
+      versions: "*.el9_?"
+      fixed: "9.0.21-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86171"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-10.0"]
+      versions: "*.el9_?.?"
+      fixed: "10.0.13-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86193"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-8.0"]
+      versions: "*.el9_?.?"
+      fixed: "8.0.32-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86169"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-9.0"]
+      versions: "*.el9_?.?"
+      fixed: "9.0.21-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86171"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-10.0"]
+      versions: "*.el9_?.??"
+      fixed: "10.0.13-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86193"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-8.0"]
+      versions: "*.el9_?.??"
+      fixed: "8.0.32-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86169"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-9.0"]
+      versions: "*.el9_?.??"
+      fixed: "9.0.21-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86171"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-10.0"]
+      versions: "*.el9_??"
+      fixed: "10.0.13-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86193"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-8.0"]
+      versions: "*.el9_??"
+      fixed: "8.0.32-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86169"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-9.0"]
+      versions: "*.el9_??"
+      fixed: "9.0.21-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86171"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-10.0"]
+      versions: "*.el9_??.?"
+      fixed: "10.0.13-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86193"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-8.0"]
+      versions: "*.el9_??.?"
+      fixed: "8.0.32-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86169"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-9.0"]
+      versions: "*.el9_??.?"
+      fixed: "9.0.21-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86171"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-10.0"]
+      versions: "*.el9_??.??"
+      fixed: "10.0.13-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86193"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-8.0"]
+      versions: "*.el9_??.??"
+      fixed: "8.0.32-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86169"
+    - release: "rhel:9"
+      binary_names: ["aspnetcore-runtime-9.0"]
+      versions: "*.el9_??.??"
+      fixed: "9.0.21-1.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:86171"
+    # Written by a person in the assembly file (A.7)
+    # added by a person: Ubuntu: dotnet6 vulnerable, fix deferred; no fix
+    - release: "ubuntu:22.04"
+      binary_names: ["aspnetcore-runtime-6.0"]
+      versions: "6.0.*ubuntu*"
+      fixed: null
+      source: "https://ubuntu.com/security/CVE-2026-70188"
+    # added by a person: Ubuntu: dotnet7 ignored (out of support); no fix
+    - release: "ubuntu:22.04"
+      binary_names: ["aspnetcore-runtime-7.0"]
+      versions: "7.0.*ubuntu*"
+      fixed: null
+      source: "https://ubuntu.com/security/CVE-2026-70188"
+    # added by a person: Ubuntu's own 8.0 builds; fixed per USN-8942-1
+    - release: "ubuntu:22.04"
+      binary_names: ["aspnetcore-runtime-8.0"]
+      versions: "8.0.*ubuntu*"
+      fixed: "8.0.32-0ubuntu1~22.04.1"
+      source: "https://ubuntu.com/security/notices/USN-8942-1"
+    # added by a person: Ubuntu's own 10.0 builds; fixed per USN-8942-1
+    - release: "ubuntu:24.04"
+      binary_names: ["aspnetcore-runtime-10.0"]
+      versions: "10.0.*ubuntu*"
+      fixed: "10.0.13-0ubuntu1~24.04.1"
+      source: "https://ubuntu.com/security/notices/USN-8942-1"
+    # added by a person: Ubuntu's own 8.0 builds; fixed per USN-8942-1
+    - release: "ubuntu:24.04"
+      binary_names: ["aspnetcore-runtime-8.0"]
+      versions: "8.0.*ubuntu*"
+      fixed: "8.0.32-0ubuntu1~24.04.1"
+      source: "https://ubuntu.com/security/notices/USN-8942-1"
+    # added by a person: Ubuntu's own 10.0 builds; fixed per USN-8942-1
+    - release: "ubuntu:26.04"
+      binary_names: ["aspnetcore-runtime-10.0"]
+      versions: "10.0.*ubuntu*"
+      fixed: "10.0.13-0ubuntu1~26.04.1"
+      source: "https://ubuntu.com/security/notices/USN-8942-1"
+    # added by a person: Ubuntu's own 10.0 builds; fixed per USN-8942-1
+    - release: "ubuntu:26.10"
+      binary_names: ["aspnetcore-runtime-10.0"]
+      versions: "10.0.*ubuntu*"
+      fixed: "10.0.13-0ubuntu1~26.10.1"
+      source: "https://ubuntu.com/security/notices/USN-8942-1"
+    # added by a person: Ubuntu's own 11.0 builds (a release candidate); fixed per USN-8942-1
+    - release: "ubuntu:26.10"
+      binary_names: ["aspnetcore-runtime-11.0"]
+      versions: "11.0.*ubuntu*"
+      fixed: "11.0.0~rc2-0ubuntu1~26.10.1"
+      source: "https://ubuntu.com/security/notices/USN-8942-1"
+  stale_code: {programs: ["dotnet"]}
+mitigations: []
+detections:
+- id: web-exploit
+  check: web.exploit
+  counts: while_exposed
+  likelihood_ratio: 4
+- id: web-error-burst
+  check: web.errors
+  counts: while_exposed
+  likelihood_ratio: 1.5
+remediation:
+- Install the .NET security update from your distribution. Ubuntu says a standard system update
+  makes all the necessary changes; on RHEL, apply Red Hat's .NET update for your .NET version
+  (RHSA-2026:86168, 86169, 86171, 86172, 86193 or 86195).
+- After updating, restart every service that runs an ASP.NET Core application, so that none
+  keeps running on the old runtime.
+- Neither Red Hat nor Ubuntu offers a workaround that meets its own criteria, so patching
+  is the fix. Red Hat says only Kestrel endpoints handling HTTP/2 are exposed to CVE-2026-70188,
+  so turning off HTTP/2 on public-facing Kestrel endpoints may reduce that one exposure until
+  you can patch. This does not help against CVE-2026-88092, which affects HTTP/1 handling.
+- If an exposed application was reachable from the internet while it ran a vulnerable build,
+  check its own logs for requests that reached protected or administrative functions without
+  proper authorization. Red Hat names credential exposure as a possible impact, so rotate
+  any credentials or session secrets those applications handled.
+references:
+- https://nvd.nist.gov/vuln/detail/CVE-2026-70188
+- https://nvd.nist.gov/vuln/detail/CVE-2026-88092
+- https://www.cve.org/CVERecord?id=CVE-2026-70188
+- https://www.cve.org/CVERecord?id=CVE-2026-88092
+- https://bugzilla.redhat.com/show_bug.cgi?id=2548796
+- https://bugzilla.redhat.com/show_bug.cgi?id=2548799
+- https://ubuntu.com/security/CVE-2026-70188
+- https://ubuntu.com/security/CVE-2026-88092
+- https://ubuntu.com/security/notices/USN-8942-1
+- https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-70188
+- https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-88092
+- https://devblogs.microsoft.com/dotnet/dotnet-and-dotnet-framework-october-2026-servicing-updates
+- https://github.com/dotnet/announcements/issues/462
+- https://github.com/dotnet/announcements/issues/472
