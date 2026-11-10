@@ -1,10 +1,11 @@
 # The packs repository's release index (checker packs index). Signed by
 # hand with the pack key: index.yaml.minisig.
 format: 1
-serial: 3
-issued: 2026-11-09T05:18:04Z
+serial: 4
+issued: 2026-11-10T01:04:05Z
 packs:
   - {id: "brotli-2026-10", version: 1, sha256: "9a10711ce03e319e05e9a5a1fe0115a5c4b75ea8acb7ac7321fb222ab9c2d9bc"}
+  - {id: "ca-certificates-2026-10", version: 1, sha256: "d2fc570161e97c1ef60aa40a438db5f91e1962cb1744d34c4628f3949c182ea7"}
   - {id: "dotnet-2026-10", version: 1, sha256: "f74e8cd3bcbbf5e4b8753eb5b29627048b5aa2aae36f2a6fb2e9d058935706b8"}
   - {id: "php2shell-2026-10", version: 1, sha256: "3e388f4fd9e148f57436daf288b8183ce8c324f8e44b27171f92b9e6a0644b15"}
 withdrawn: []

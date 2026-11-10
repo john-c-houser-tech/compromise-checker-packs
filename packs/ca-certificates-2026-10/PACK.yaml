@@ -1,0 +1,112 @@
+# Compromised eMudhra intermediate CAs trusted by the system CA store
+# Assembled by the pack drafter (A.7). Where each part came from:
+#   prose (title, mitigations, detections, remediation, references): an AI draft, edited by a person (remediation), read and accepted by jch (draft sha256 630a8d832c1ba47b)
+#   packages: vendor data for CVE-2026-114406 (`drafter fill`)
+#   id, version, window, weight, binary filter: the person's assembly file
+format: 1
+id: ca-certificates-2026-10
+version: 1
+title: Compromised eMudhra intermediate CAs trusted by the system CA store
+published: 2026-11-10
+cves: [CVE-2026-114406]
+exposure:
+  window_start: 2026-10-20T00:00:00Z
+  likelihood_ratio: 2
+  # A build no entry matches reads "can't judge", never "not affected".
+  other_builds: cant_judge
+  packages:
+    # RHEL, with Rocky Linux and AlmaLinux rebuilds
+    - release: "rhel:10"
+      binary_names: ["ca-certificates"]
+      versions: "*.el10"
+      fixed: "2026.2.92_v9.0.319-100.3.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:88455"
+    - release: "rhel:10"
+      binary_names: ["ca-certificates"]
+      versions: "*.el10_?"
+      fixed: "2026.2.92_v9.0.319-100.3.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:88455"
+    - release: "rhel:10"
+      binary_names: ["ca-certificates"]
+      versions: "*.el10_?.?"
+      fixed: "2026.2.92_v9.0.319-100.3.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:88455"
+    - release: "rhel:10"
+      binary_names: ["ca-certificates"]
+      versions: "*.el10_?.??"
+      fixed: "2026.2.92_v9.0.319-100.3.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:88455"
+    - release: "rhel:10"
+      binary_names: ["ca-certificates"]
+      versions: "*.el10_??"
+      fixed: "2026.2.92_v9.0.319-100.3.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:88455"
+    - release: "rhel:10"
+      binary_names: ["ca-certificates"]
+      versions: "*.el10_??.?"
+      fixed: "2026.2.92_v9.0.319-100.3.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:88455"
+    - release: "rhel:10"
+      binary_names: ["ca-certificates"]
+      versions: "*.el10_??.??"
+      fixed: "2026.2.92_v9.0.319-100.3.el10_2"
+      source: "https://access.redhat.com/errata/RHSA-2026:88455"
+    - release: "rhel:9"
+      binary_names: ["ca-certificates"]
+      versions: "*.el9"
+      fixed: "2026.2.92_v9.0.319-90.3.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:88459"
+    - release: "rhel:9"
+      binary_names: ["ca-certificates"]
+      versions: "*.el9_?"
+      fixed: "2026.2.92_v9.0.319-90.3.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:88459"
+    - release: "rhel:9"
+      binary_names: ["ca-certificates"]
+      versions: "*.el9_?.?"
+      fixed: "2026.2.92_v9.0.319-90.3.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:88459"
+    - release: "rhel:9"
+      binary_names: ["ca-certificates"]
+      versions: "*.el9_?.??"
+      fixed: "2026.2.92_v9.0.319-90.3.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:88459"
+    - release: "rhel:9"
+      binary_names: ["ca-certificates"]
+      versions: "*.el9_??"
+      fixed: "2026.2.92_v9.0.319-90.3.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:88459"
+    - release: "rhel:9"
+      binary_names: ["ca-certificates"]
+      versions: "*.el9_??.?"
+      fixed: "2026.2.92_v9.0.319-90.3.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:88459"
+    - release: "rhel:9"
+      binary_names: ["ca-certificates"]
+      versions: "*.el9_??.??"
+      fixed: "2026.2.92_v9.0.319-90.3.el9_8"
+      source: "https://access.redhat.com/errata/RHSA-2026:88459"
+mitigations: []
+detections: []
+remediation:
+- 'Update ca-certificates now to the fixed build from your vendor, which distrusts the compromised
+  eMudhra certificates: RHEL 9 RHSA-2026:88459, RHEL 10 RHSA-2026:88455, or the Rocky Linux
+  and AlmaLinux rebuilds of them.'
+- 'If you can''t update yet, add the two root CAs that signed the compromised intermediates
+  to the system trust store''s blocklist: Comodo AAA Services root and emSign ECC Root CA
+  - G3. Follow the ''Red Hat Enterprise Linux and Fedora'' mitigation steps linked from RHSB-2026-012.'
+- Rebuild every container based on RHEL or UBI images once the base images are updated, and
+  check the Container Health Index in the Red Hat Container Catalog for Red Hat's own product
+  images.
+- On hosts running layered products that pull packages from the RHEL channel, such as OpenShift,
+  OpenStack or Red Hat Virtualization, make sure the underlying RHEL CA trust store package
+  is current. OpenShift and Agent-based Installer environments have their own mitigation steps
+  in the bulletin.
+- Go programs, Java and Perl's Mozilla::CA carry their own trust stores, tracked separately
+  (CVE-2026-111943, CVE-2026-91403, CVE-2026-113812). Update them as well if this host's TLS
+  clients rely on them.
+references:
+- https://access.redhat.com/security/vulnerabilities/RHSB-2026-012
+- https://bugzilla.redhat.com/show_bug.cgi?id=2556046
+- https://nvd.nist.gov/vuln/detail/CVE-2026-114406
+- https://www.cve.org/CVERecord?id=CVE-2026-114406
