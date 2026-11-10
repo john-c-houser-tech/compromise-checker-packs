@@ -1,10 +1,17 @@
 # Compromise Checker threat packs
 
 Threat packs for [Compromise Checker](https://github.com/john-c-houser-tech/compromise-checker):
-signed, dated files that teach the tool about one threat. A pack says which
-package versions are vulnerable on each Linux release (from the vendors'
-own advisories), which settings mitigate it, and which signs of attack to
-look for. A pack is data, never code: nothing in it is run.
+signed, dated files that teach the tool about one attack seen in the wild, so
+it can judge whether a server was broken into that way. A pack says which
+signs of the attack to look for, when a server was open to it (which package
+versions are vulnerable on each Linux release, from the vendors' own
+advisories), and which settings mitigate it. A pack is data, never code:
+nothing in it is run.
+
+Compromise Checker answers one question: has this server been broken into? It
+isn't a vulnerability scanner or a patching tool. So since 2026-11-10 a threat
+gets a pack only if it is being exploited and leaves signs on a server that
+the tool can see ([which threats get a pack](https://github.com/john-c-houser-tech/compromise-checker/blob/main/docs/packs.md#which-threats-get-a-pack)).
 
 Released by NouriLoop LLC under [CC BY 4.0](LICENSE).
 
