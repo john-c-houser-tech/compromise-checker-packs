@@ -1,6 +1,6 @@
 format: 1
 id: php2shell-2026-10
-version: 1
+version: 2
 title: "PHP2Shell: PHP remote code execution (CVE-2026-109618, CVE-2026-109619)"
 published: 2026-10-30
 cves: [CVE-2026-109618, CVE-2026-109619]
@@ -393,10 +393,10 @@ mitigations:
       php_admin_flag in each PHP-FPM pool) and restart every worker. It blocks the
       session upload progress route to CVE-2026-109619, not the other routes (on PHP
       8.5 also set fatal_error_backtraces=0), and does nothing for CVE-2026-109618: it
-      doesn't replace the fixed package. PHP suggests keeping it off until its next
-      regular release fixes CVE-2026-115560, unless the application never changes
-      session.serialize_handler at runtime. PHP warns not to rely on ini_set() or an
-      FPM .user.ini for this.
+      doesn't replace the fixed package. PHP's releases of 19 November 2026 (8.2.36,
+      8.3.37, 8.4.28, 8.5.13) fix CVE-2026-115560; until a host has one, PHP says to
+      keep it off in every configuration that can write to the session store. PHP
+      warns not to rely on ini_set() or an FPM .user.ini for this.
 detections:
   - id: worker-child
     check: web.worker_child
@@ -440,6 +440,14 @@ remediation:
     Upgrade PHP to a fixed package and restart every PHP worker, and Apache where it
     runs mod_php: this pack can't detect an Apache left running on the old module.
   - >-
+    On PHP 8.3 and later, October's fix for CVE-2026-109619 was incomplete:
+    CVE-2026-129481 (8.3 and up) and CVE-2026-129182 (8.5) reach the same kind of
+    use-after-free by other routes. Install PHP's releases of 19 November 2026 (8.3.37,
+    8.4.28, 8.5.13) or a vendor build that carries them, and restart every worker.
+    Turning off upload progress doesn't block them. This pack doesn't judge those two
+    flaws: neither was known to be exploited when this version was published
+    (2026-11-26).
+  - >-
     If the host was exposed during the window, treat secrets the PHP process could
     read as possibly disclosed: rotate application keys, database passwords, API
     keys and TLS private keys, and invalidate sessions.
@@ -451,6 +459,9 @@ references:
   - https://www.cisa.gov/news-events/alerts/2026/10/21/critical-vulnerabilities-php-require-immediate-patching
   - https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w
   - https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp
+  - https://github.com/php/php-src/security/advisories/GHSA-g3vh-838c-65v7
+  - https://github.com/php/php-src/security/advisories/GHSA-2fjv-p558-g82m
+  - https://github.com/php/php-src/security/advisories/GHSA-658j-r8rw-q6mx
   - https://access.redhat.com/security/vulnerabilities/RHSB-2026-013
   - https://almalinux.org/blog/2026-10-21-php2shell-cve-2026-109618-cve-2026-109619/
   - https://ubuntu.com/security/notices/USN-8948-2
