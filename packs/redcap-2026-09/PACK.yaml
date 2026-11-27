@@ -1,0 +1,93 @@
+format: 1
+id: redcap-2026-09
+version: 1
+title: "REDCap: unauthenticated remote code execution through survey passthrough routing (CVE-2026-90817)"
+published: 2026-11-27
+cves: [CVE-2026-90817]
+exposure:
+  # The CVE was published on 2026-09-20 and Securifera's write-up followed on
+  # 2026-09-27. Unit 42 reported miners installed through it on 2026-10-07, so
+  # the first attacks came by then. On CISA's KEV list since 2026-11-18.
+  window_start: 2026-09-20T00:00:00Z
+  first_seen_in_wild: 2026-10-07T00:00:00Z
+  likelihood_ratio: 5
+  # REDCap isn't a package: each version's code is in a redcap_vX.Y.Z folder
+  # in the install (checker 0.1.7 and later). The fixes are 16.0.49 LTS,
+  # 17.3.10 LTS and 17.4.4 Standard, all released on 2026-09-09; every
+  # version from 13.3.0 on is affected. No other release line got the fix:
+  # 17.1 and 17.2 had stopped before September, and 17.5 and later came after.
+  applications:
+    - name: REDCap
+      folder: "redcap_v*"
+      versions: "16.0.*"
+      fixed: "16.0.49"
+      source: https://www.cve.org/CVERecord?id=CVE-2026-90817
+    # 17.3.0 to 17.3.4 were Standard releases, 17.3.5 on LTS: one line.
+    - name: REDCap
+      folder: "redcap_v*"
+      versions: "17.3.*"
+      fixed: "17.3.10"
+      source: https://www.cve.org/CVERecord?id=CVE-2026-90817
+    # Every other line, from 13.3.0: below 17.4.4 there's no fix on the line.
+    - name: REDCap
+      folder: "redcap_v*"
+      versions: "*"
+      affected_from: "13.3.0"
+      fixed: "17.4.4"
+      source: https://www.cve.org/CVERecord?id=CVE-2026-90817
+detections:
+  # Unit 42's chain: a Blade-cache web shell runs bash from PHP-FPM, which
+  # fetches and runs XMRig from /var/tmp/.syslog-<hash>/, adds an SSH key to
+  # every authorized_keys file it can reach, and wipes shell history.
+  - id: worker-child
+    check: web.worker_child
+    likelihood_ratio: 100
+  - id: miner
+    check: process.miner
+    likelihood_ratio: 50
+  - id: staging-folder
+    title: A hidden syslog-named folder in /var/tmp, where this campaign stages its miner
+    snapshot:
+      section: unusual_files
+      key: {glob: "/var/tmp/.syslog-*"}
+      state: present
+    likelihood_ratio: 20
+  - id: new-ssh-key
+    check: ssh.authorized_keys
+    likelihood_ratio: 10
+  - id: history-wiped
+    check: history.disabled
+    likelihood_ratio: 5
+remediation:
+  - >-
+    Upgrade REDCap to 16.0.49 LTS, 17.3.10 LTS or 17.4.4 Standard, or a later release on
+    the same line; versions 16.1 to 17.2 have no fix of their own, so move to a fixed LTS or
+    Standard release. Go to the newest release on the line, not only the first fixed one:
+    the releases after the fix repair image and file links that the fix's security change
+    broke. Upgrade test and UAT installs too: one reachable from the internet is as
+    exploitable as production.
+  - >-
+    Remove old version folders (redcap_vX.Y.Z) as soon as the new release has been tested.
+    REDCap's upgrade instructions don't specify to remove the previous release folder, but
+    removing it as soon as possible is a best practice. This pack reads the newest one as
+    the version running.
+  - >-
+    Until you can upgrade: restrict or turn off public surveys, and block survey requests
+    to the root dispatcher, the Data Import controller (DataImportController) and the
+    Parcel controller (ParcelController). Treat that as temporary containment only.
+  - >-
+    If the install was exposed during the window, treat what the web account could read as
+    disclosed: the database password and salt in database.php, and the projects' data.
+    Rotate the database password and any keys the web account could read.
+  - >-
+    Look for the signs of the campaign Unit 42 reported, which this pack can't all see: a
+    compiled template in REDCap's temp/cache folder that doesn't match a fresh rebuild,
+    processes named syslog-ng-<hash>, cron entries that fetch .jpg files and pipe them into
+    bash, an edited ~/.profile, and connections to auto.c3pool.org. The exploit request is a
+    POST to /surveys/ with __passthru and route=DataImportController:index; this pack can't
+    see it, because those requests aren't kept as events.
+references:
+  - https://www.cve.org/CVERecord?id=CVE-2026-90817
+  - https://github.com/PaloAltoNetworks/Unit42-timely-threat-intel/blob/main/2026-10-07-XMRig-campaign-through-CVE-2026-90817.txt
+  - https://www.securifera.com/blog/2026/09/27/survey-says-remote-code-execution-cve-2026-90817/
+  - https://www.cisa.gov/news-events/alerts/2026/11/18/cisa-adds-four-known-exploited-vulnerabilities-catalog
